@@ -18,10 +18,13 @@ namespace WordCount
             int numberOfGroups = Environment.ProcessorCount;
             int finished = 0;
 
+            //Start indexing
             watchSearch.Start();
             
             string text = File.ReadAllText("../../../file.txt").ToLower();
             string[] textSplit = text.Split(new[] { Environment.NewLine, " ", ",",".","--", "\"" }, StringSplitOptions.RemoveEmptyEntries);
+
+            //Counting
             foreach(string s in textSplit)
             {
                 if (dic.ContainsKey(s))
@@ -32,6 +35,8 @@ namespace WordCount
             int uord = dic.Count;
 
             watchSearch.Stop();
+
+            //Start Displaying
             watchDisplay.Start();
 
             Action onCompleted = () =>
@@ -49,7 +54,7 @@ namespace WordCount
                     finished++;
             };
 
-            //var result = dic.GroupBy(x => counter++ % numberOfGroups);
+            //Converts dictionary to list of lists of keyvalue pairs
             var dicList = dic
                         .Select((x, i) => new { Index = i, Value = x })
                         .GroupBy(x => x.Index / ((uord / numberOfGroups)))
@@ -71,14 +76,13 @@ namespace WordCount
                 });
                 thread.Start();
             }
-
-            //Search time: 84ms, Display time: 4731ms <= single thread
-            //Search time: 72ms, Display time: 1026ms
         }
 
         private static void print(List<KeyValuePair<string, int>> list)
         {
+            //Pairs in row
             int r = 10;
+            //Colum width
             int space = 32;
             for (int i = 0; i < list.Count; i+= r)
             {
