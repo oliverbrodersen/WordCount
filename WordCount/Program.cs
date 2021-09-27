@@ -18,16 +18,19 @@ namespace WordCount
 
             Console.WriteLine("File path:");
             string path = Console.ReadLine();
+            string[] filePaths = Directory.GetFiles(path, "*.txt", SearchOption.AllDirectories);
 
             //Start indexing
             watchSearch.Start();
-
-            using (StreamReader sr = new StreamReader(path))
+            foreach (var p in filePaths)
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(p))
                 {
-                    textSplit.AddRange(line.Split(new[] { Environment.NewLine, " ", ",", ".", "\"" }, StringSplitOptions.RemoveEmptyEntries));
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        textSplit.AddRange(line.Split(new[] { Environment.NewLine, " ", ",", ".", "\"" }, StringSplitOptions.RemoveEmptyEntries));
+                    }
                 }
             }
 
